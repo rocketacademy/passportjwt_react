@@ -13,7 +13,7 @@ export default function Profile(props) {
       `${process.env.REACT_APP_API_SERVER}/auth/${props.username}`,
       {
         headers: {
-          Authorization: `Bearer ${props.oken}`,
+          Authorization: `Bearer ${props.token}`,
         },
       }
     );
