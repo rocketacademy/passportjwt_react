@@ -5,8 +5,9 @@ import { useState } from "react";
 import Profile from "./Profile";
 
 function App() {
-  const [token, setToken] = useState("");
-  const [username, setUsername] = useState("");
+  // only for stateful access
+  // const [token, setToken] = useState("");
+  // const [username, setUsername] = useState("");
 
   return (
     <div className="App">
@@ -20,9 +21,12 @@ function App() {
           }}
         >
           <Form />
-          <Form getToken={setToken} getUsername={setUsername} login />
+          <Form login />
+
+          {/* <Form getToken={setToken} getUsername={setUsername} login /> */}
         </div>
-        <Profile token={token} username={username} />
+        {/* <Profile token={token} username={username} /> */}
+        <Profile />
       </header>
     </div>
   );

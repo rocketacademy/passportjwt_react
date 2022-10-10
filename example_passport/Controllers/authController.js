@@ -15,19 +15,20 @@ class AuthController {
       { session: false },
       async (err, user, info) => {
         console.log("authController user:", user);
-        console.log("authController info:", info);
         console.log(req.params);
+        console.log("info", info);
 
         if (err) {
           console.log(err);
         }
-        if (info !== undefined) {
-          console.log(info.message);
+        if (info === {}) {
+          console.log("info error");
           res.status(401).send(info.message);
-        } else if (user.username === req.params.username) {
+          // updated this strategy to validate using ID not username. (Also removed the username params)
+        } else if (user.id === info.id) {
           let userInfo = await this.model.findOne({
             where: {
-              username: req.params.username,
+              username: user.username,
             },
           });
 
@@ -46,8 +47,8 @@ class AuthController {
             res.status(401).send("no user exists in db with that username");
           }
         } else {
-          console.error("jwt id and username do not match");
-          res.status(403).send("username and jwt token do not match");
+          console.error("jwt id do not match");
+          res.status(403).send("jwt token do not match");
         }
       }
     )(req, res, next);
@@ -88,16 +89,16 @@ class AuthController {
         },
       });
 
+      // alter below to change how long JWT or cookie lasts.
+      // if the time limit runs out the user wont be able to click the button anymore
       const token = jwt.sign({ id: userInfo.id }, jwtSecret.secret, {
-        expiresIn: "1h",
+        expiresIn: "5s",
       });
       console.log(token);
       console.log(res.cookie("jwt_token", token));
 
-      // res.cookie("test", "test");
-      // send a cookie
       res.cookie("jwt_token", token, {
-        maxAge: 1000 * 60 * 15, // 15 minute expiry
+        maxAge: 1000 * 10, // 10 second, * 60 * 15, // 15 minute expiry
         httpOnly: false,
         signed: false,
         Path: "/",

@@ -16,14 +16,15 @@ export default function Form(props) {
         { username, password },
         {
           withCredentials: true,
-          // headers: { "Content-Type": "application/json" },
         }
       );
-      props.getToken(response.data.token);
-      props.getUsername(username);
+      // only for state
+      // props.getToken(response.data.token);
+      // props.getUsername(username);
 
-      localStorage.setItem("passport_token", response.data.token);
-      localStorage.setItem("username", username);
+      // only for local storage
+      // localStorage.setItem("passport_token", response.data.token);
+      // localStorage.setItem("username", username);
 
       console.log(response.data);
       console.log(response);
@@ -34,7 +35,6 @@ export default function Form(props) {
         { email, password, username },
         {
           withCredentials: true,
-          // headers: { "Content-Type": "application/json" },
         }
       );
       console.log(response);

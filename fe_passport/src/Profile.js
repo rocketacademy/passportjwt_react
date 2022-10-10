@@ -9,44 +9,48 @@ export default function Profile(props) {
 
   const getData = async () => {
     console.log("getdata!!");
+    console.log("cookies");
 
-    const token = localStorage.getItem("passport_token");
-    const requestedUsername = localStorage.getItem("username");
-    let data;
+    // cookies
+    let data = await axios.get(`${process.env.REACT_APP_API_SERVER}/auth/`, {
+      withCredentials: true,
+    });
+
+    // local storage if it is there
+
+    // const token = localStorage.getItem("passport_token");
+    // const requestedUsername = localStorage.getItem("username");
+    // let data;
     // if (token && requestedUsername) {
-    //   console.log("local straoge");
+    //   console.log("localstorage);
     //   data = await axios.get(
     //     `${process.env.REACT_APP_API_SERVER}/auth/${requestedUsername}`,
     //     {
-    //       credentials: "include",
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
+    //       withCredentials: true,
     //     }
     //   );
     // } else {
-    console.log("state");
+    //   console.log("state");
 
-    data = await axios.get(
-      `${process.env.REACT_APP_API_SERVER}/auth/${props.username}`,
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-        },
-      }
-    );
+    //   data = await axios.get(
+    //     `${process.env.REACT_APP_API_SERVER}/auth/${props.username}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${props.token}`,
+    //       },
+    //     }
+    //   );
     // }
 
-    console.log(data);
+    console.log(data.data);
 
     setEmail(data.data.email);
     setId(data.data.id);
     setUsername(data.data.username);
     setHashedPassword(data.data.password);
   };
-  console.log(props.token);
-  console.log(props.username);
+  // console.log(props.token);
+  // console.log(props.username);
 
   return (
     <div>

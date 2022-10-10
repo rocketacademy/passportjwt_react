@@ -3,16 +3,12 @@ const jwtConfig = require("../Auth/jwtConfig");
 
 const authenticateJWT = (req, res, next) => {
   console.log("testing auth");
-  console.log(req.cookies);
-  console.log(req.cookies["jwt_token"]);
 
-  console.log(req.headers);
-  const authHeader = req.headers.authorization;
+  const tokenCookie = req.cookies["jwt_token"];
+  console.log(tokenCookie);
 
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-
-    jwt.verify(token, jwtConfig.secret, (err, user) => {
+  if (tokenCookie) {
+    jwt.verify(tokenCookie, jwtConfig.secret, (err, user) => {
       if (err) {
         return res.sendStatus(403);
       }
@@ -35,7 +31,8 @@ class AuthRouter {
   routes() {
     const router = this.express.Router();
 
-    router.get("/:username", authenticateJWT, this.controller.getOne);
+    // altered get to remove the username parameter, not needed.
+    router.get("/", authenticateJWT, this.controller.getOne);
     router.post("/signup", this.controller.signup);
     router.post("/login", this.controller.login);
     return router;

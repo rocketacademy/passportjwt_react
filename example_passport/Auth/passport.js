@@ -82,8 +82,14 @@ module.exports = (passport, User) => {
     )
   );
 
+  const cookieExtractor = function (req) {
+    let token = null;
+    if (req && req.cookies) token = req.cookies["jwt_token"];
+    return token;
+  };
+
   const options = {
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: cookieExtractor,
     secretOrKey: jwtSecret.secret,
   };
 
@@ -98,9 +104,10 @@ module.exports = (passport, User) => {
           },
         });
 
+        // pass the JWT token from the request to the authcontroller to validate the ID's match
         if (user) {
           console.log("User found in DB", user);
-          done(null, user);
+          done(null, user, jwt_payload);
         } else {
           console.log("User not in db");
           done(null, false);
