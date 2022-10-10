@@ -9,14 +9,34 @@ export default function Profile(props) {
 
   const getData = async () => {
     console.log("getdata!!");
-    let data = await axios.get(
+
+    const token = localStorage.getItem("passport_token");
+    const requestedUsername = localStorage.getItem("username");
+    let data;
+    // if (token && requestedUsername) {
+    //   console.log("local straoge");
+    //   data = await axios.get(
+    //     `${process.env.REACT_APP_API_SERVER}/auth/${requestedUsername}`,
+    //     {
+    //       credentials: "include",
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   );
+    // } else {
+    console.log("state");
+
+    data = await axios.get(
       `${process.env.REACT_APP_API_SERVER}/auth/${props.username}`,
       {
+        withCredentials: true,
         headers: {
           Authorization: `Bearer ${props.token}`,
         },
       }
     );
+    // }
 
     console.log(data);
 

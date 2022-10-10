@@ -3,6 +3,9 @@ const jwtConfig = require("../Auth/jwtConfig");
 
 const authenticateJWT = (req, res, next) => {
   console.log("testing auth");
+  console.log(req.cookies);
+  console.log(req.cookies["jwt_token"]);
+
   console.log(req.headers);
   const authHeader = req.headers.authorization;
 

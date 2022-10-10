@@ -13,17 +13,32 @@ export default function Form(props) {
 
       let response = await axios.post(
         `${process.env.REACT_APP_API_SERVER}/auth/login`,
-        { username, password }
+        { username, password },
+        {
+          withCredentials: true,
+          // headers: { "Content-Type": "application/json" },
+        }
       );
       props.getToken(response.data.token);
       props.getUsername(username);
+
+      localStorage.setItem("passport_token", response.data.token);
+      localStorage.setItem("username", username);
+
       console.log(response.data);
+      console.log(response);
     } else {
       console.log("signup");
       let response = await axios.post(
         `${process.env.REACT_APP_API_SERVER}/auth/signup`,
-        { email, password, username }
+        { email, password, username },
+        {
+          withCredentials: true,
+          // headers: { "Content-Type": "application/json" },
+        }
       );
+      console.log(response);
+
       console.log(response.data);
     }
   };

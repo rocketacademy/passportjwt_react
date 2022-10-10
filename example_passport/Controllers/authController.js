@@ -9,6 +9,7 @@ class AuthController {
 
   getOne = async (req, res, next) => {
     console.log("getting one!");
+    console.log(req.cookies);
     this.passport.authenticate(
       "jwt",
       { session: false },
@@ -58,6 +59,7 @@ class AuthController {
     this.passport.authenticate("local-signup", async (err, user) => {
       if (err) {
         console.error(err);
+        res.send(err);
       }
       const userInfo = await this.model.findOne({
         where: {
@@ -74,6 +76,7 @@ class AuthController {
   login = async (req, res, next) => {
     console.log("login");
     console.log(req.body);
+    console.log(req.cookies);
 
     this.passport.authenticate("local-login", async (err, user) => {
       if (err) {
@@ -86,13 +89,21 @@ class AuthController {
       });
 
       const token = jwt.sign({ id: userInfo.id }, jwtSecret.secret, {
-        expiresIn: 60 * 24,
+        expiresIn: "1h",
       });
-      // send a cookie
+      console.log(token);
+      console.log(res.cookie("jwt_token", token));
 
-      res
-        .status(200)
-        .send({ auth: true, token, message: "User found and logged in" });
+      // res.cookie("test", "test");
+      // send a cookie
+      res.cookie("jwt_token", token, {
+        maxAge: 1000 * 60 * 15, // 15 minute expiry
+        httpOnly: false,
+        signed: false,
+        Path: "/",
+      });
+
+      res.send({ auth: true, token, message: "User found and logged in" });
     })(req, res, next);
   };
 }
